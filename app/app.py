@@ -24,6 +24,7 @@ def deliver_keyword():
 
 @app.route('/', methods=['GET'])
 def index():
+    print('87777')
     return "Hello 20181118888"
 
 # get /store/<name> data: {name :}
@@ -76,6 +77,20 @@ def routesInThisYear():
     returndata = jsonify(a)
     return returndata
 
+
+@app.route('/classificationtoevent', methods=['POST'])
+def classificationtoevent():
+    a = []
+    classification = request.values['classification']
+    yearFrom = int(request.values['yearFrom'])
+    yearTo = int(request.values['yearTo'])
+    print(yearFrom, yearTo)
+    events = eventsTable.find({"yearFrom": {"$gte": yearFrom-1},
+                               "yearTo": {"$lte": yearTo+1},
+                               "detail": classification, }, {"_id": 0})
+    for event in events:
+        a.append(event)
+    return jsonify(a)
 
 # @app.route('/searchKeyword', methods=['POST'])
 # def searchKeyword():
