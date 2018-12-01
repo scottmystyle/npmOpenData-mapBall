@@ -7,15 +7,18 @@ r = requests.get(
 countries = []
 objectIDs = r.json()["objectIDs"]
 
-for thisid in objectIDs:
+for thisid in objectIDs[:int(len(objectIDs)/2)]:
+    if thisid <= 9094:
+        print(f"skip {thisid}")
+        continue
     r = requests.get(
         f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{thisid}')
     thisobject = r.json()
+    print(thisid)
     if thisobject["primaryImage"] != "" and thisobject["country"] != "":
         if thisobject["artistBeginDate"] != "" and thisobject["artistEndDate"] != "":
             if thisobject["country"] not in countries:
                 countries.append(thisobject["country"])
-            print(thisid)
             print(thisobject["artistBeginDate"])
             thisdata = {
                 "title": thisobject["title"],
@@ -55,3 +58,5 @@ print(countries)
 #     ],
 #     "url": thisobject["objectURL"]
 # }
+
+# 一半：236554
